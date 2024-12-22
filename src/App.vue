@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
-import type { TimerState } from './types'
+import type { TimerState, Task } from './types'
 import TaskPane from './components/TaskPane.vue'
 
 const timerState = ref<TimerState>('idle')
@@ -12,6 +12,38 @@ const currentTaskPomodoroCount = ref(2)
 const currentTaskPomodoroLeft = ref(1)
 const currentTask = ref('タイマー部分をざっくり実装する')
 const isPaneOpen = ref(false)
+const tasks = ref<Task[]>([
+  {
+    id: 1,
+    content: 'Vue.jsの学習',
+    pomodoroCount: 3,
+    isCompleted: false,
+  },
+  {
+    id: 2,
+    content: 'プロジェクトの設計書作成',
+    pomodoroCount: 5,
+    isCompleted: true,
+  },
+  {
+    id: 3,
+    content: 'メール返信',
+    pomodoroCount: 1,
+    isCompleted: false,
+  },
+  {
+    id: 4,
+    content: 'ランディングページのデザイン作成',
+    pomodoroCount: 4,
+    isCompleted: true,
+  },
+  {
+    id: 5,
+    content: 'コードレビュー',
+    pomodoroCount: 2,
+    isCompleted: false,
+  },
+])
 
 const start = () => {
   timerState.value = 'running'
@@ -113,7 +145,7 @@ onUnmounted(() => {
         再開
       </button>
     </div>
-    <TaskPane v-if="isPaneOpen" v-model="isPaneOpen" />
+    <TaskPane v-if="isPaneOpen" v-model:is-pane-open="isPaneOpen" v-model:tasks="tasks" />
   </main>
 </template>
 
