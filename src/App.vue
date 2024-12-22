@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 import type { TimerState } from './types'
 
 const timerState = ref<TimerState>('idle')
@@ -26,6 +26,10 @@ const pause = () => {
   timerState.value = 'paused'
   clearInterval(intervalId.value)
 }
+
+onUnmounted(() => {
+  clearInterval(intervalId.value)
+})
 </script>
 
 <template>
@@ -47,8 +51,17 @@ const pause = () => {
   </header>
   <main>
     <div class="flex">
-      <div v-for="i in pomodoroCount" :key="i">
+      <div v-for="i in pomodoroCount - pomodoroLeft" :key="i">
         <img alt="Pomodoro Timer" src="./assets/tomato.png" width="30" height="30" />
+      </div>
+      <div v-for="i in pomodoroLeft" :key="i">
+        <img
+          alt="Pomodoro Timer"
+          src="./assets/tomato.png"
+          width="30"
+          height="30"
+          class="opacity-30"
+        />
       </div>
     </div>
     <p>{{ currentTask }}</p>
@@ -57,8 +70,17 @@ const pause = () => {
       {{ Math.floor(restTime / 60) }}:{{ String(restTime % 60).padStart(2, '0') }}
     </div>
     <div class="flex justify-center gap-1">
-      <div v-for="i in currentTaskPomodoroCount" :key="i">
+      <div v-for="i in currentTaskPomodoroCount - currentTaskPomodoroLeft" :key="i">
         <img alt="Pomodoro Timer" src="./assets/tomato.png" width="30" height="30" />
+      </div>
+      <div v-for="i in currentTaskPomodoroLeft" :key="i">
+        <img
+          alt="Pomodoro Timer"
+          src="./assets/tomato.png"
+          width="30"
+          height="30"
+          class="opacity-30"
+        />
       </div>
     </div>
     <div class="flex justify-center gap-4">
