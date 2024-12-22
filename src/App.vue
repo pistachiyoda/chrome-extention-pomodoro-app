@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onUnmounted, ref } from 'vue'
 import type { TimerState } from './types'
+import TaskPane from './components/TaskPane.vue'
 
 const timerState = ref<TimerState>('idle')
 const intervalId = ref<ReturnType<typeof setInterval>>()
@@ -10,6 +11,7 @@ const pomodoroLeft = ref(5)
 const currentTaskPomodoroCount = ref(2)
 const currentTaskPomodoroLeft = ref(1)
 const currentTask = ref('タイマー部分をざっくり実装する')
+const isPaneOpen = ref(false)
 
 const start = () => {
   timerState.value = 'running'
@@ -27,6 +29,10 @@ const pause = () => {
   clearInterval(intervalId.value)
 }
 
+const openTaskWindow = () => {
+  isPaneOpen.value = true
+}
+
 onUnmounted(() => {
   clearInterval(intervalId.value)
 })
@@ -41,6 +47,7 @@ onUnmounted(() => {
       stroke-width="1.5"
       stroke="currentColor"
       class="size-6"
+      @click="openTaskWindow"
     >
       <path
         stroke-linecap="round"
@@ -106,6 +113,7 @@ onUnmounted(() => {
         再開
       </button>
     </div>
+    <TaskPane v-if="isPaneOpen" v-model="isPaneOpen" />
   </main>
 </template>
 
