@@ -5,6 +5,10 @@ import type { TimerState } from './types'
 const timerState = ref<TimerState>('idle')
 const intervalId = ref<ReturnType<typeof setInterval>>()
 const restTime = ref(25 * 60)
+const pomodoroCount = ref(6)
+const pomodoroLeft = ref(5)
+const currentTaskPomodoroCount = ref(2)
+const currentTaskPomodoroLeft = ref(1)
 const currentTask = ref('タイマー部分をざっくり実装する')
 
 const start = () => {
@@ -25,8 +29,7 @@ const pause = () => {
 </script>
 
 <template>
-  <header class="flex items-center gap-2">
-    <!-- <img alt="Pomodoro Timer" src="./assets/tomato.png" width="30" height="30" /> -->
+  <header class="flex justify-end">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
@@ -43,10 +46,20 @@ const pause = () => {
     </svg>
   </header>
   <main>
+    <div class="flex">
+      <div v-for="i in pomodoroCount" :key="i">
+        <img alt="Pomodoro Timer" src="./assets/tomato.png" width="30" height="30" />
+      </div>
+    </div>
     <p>{{ currentTask }}</p>
     <P>作業完了まであと</P>
     <div class="text-6xl text-center">
       {{ Math.floor(restTime / 60) }}:{{ String(restTime % 60).padStart(2, '0') }}
+    </div>
+    <div class="flex justify-center gap-1">
+      <div v-for="i in currentTaskPomodoroCount" :key="i">
+        <img alt="Pomodoro Timer" src="./assets/tomato.png" width="30" height="30" />
+      </div>
     </div>
     <div class="flex justify-center gap-4">
       <button
